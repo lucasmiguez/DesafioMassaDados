@@ -1,4 +1,5 @@
-﻿using CommonLibrary.Business;
+﻿using ClosedXML.Excel;
+using CommonLibrary.Business;
 using CommonLibrary.Models;
 using Newtonsoft.Json;
 using System;
@@ -197,6 +198,98 @@ namespace Interface.UI
             }
         }
 
+
+        private void ExportarExcel3()
+        {
+            try 
+            { 
+                using (var workbook = new XLWorkbook())
+                {
+                    var worksheet = workbook.Worksheets.Add("MassaDados");
+
+
+                    for (int i = 1; i < dataGridView1.Columns.Count + 1; i++)
+                    {
+                        worksheet.Cell(1, i).Value = dataGridView1.Columns[i - 1].HeaderText;
+                    }
+
+                    for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
+                    {
+                        for (int j = 0; j < dataGridView1.Columns.Count; j++)
+                        {
+                            worksheet.Cell(i + 2, j + 1).Value = dataGridView1.Rows[i].Cells[j].Value.ToString();
+                        }
+                    }
+
+
+                    Guid _guid = Guid.NewGuid();
+                    string fullPath = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "");
+                    fullPath += @"\" + _guid.ToString() + ".xlsx";
+                    
+                    workbook.SaveAs(fullPath);
+                    
+                    System.Diagnostics.Process.Start(fullPath);
+                    
+                }
+            }catch(Exception ex) 
+            {
+                MessageBox.Show("Sem dados a Exportar " + ex.Message );
+            }
+        }
+
+
+        private void ExportarExcel2()
+        {
+            if (dataGridView1.Rows.Count > 0)
+            {
+                try
+                {
+                    Microsoft.Office.Interop.Excel.Application excel;
+                    Microsoft.Office.Interop.Excel.Workbook worKbooK;
+                    Microsoft.Office.Interop.Excel.Worksheet worKsheeT;
+                    Microsoft.Office.Interop.Excel.Range celLrangE;
+
+                    excel = new Microsoft.Office.Interop.Excel.Application();
+                    excel.Visible = false;
+                    excel.DisplayAlerts = false;
+                    worKbooK = excel.Workbooks.Add(Type.Missing);
+
+
+                    worKsheeT = (Microsoft.Office.Interop.Excel.Worksheet)worKbooK.ActiveSheet;
+                    worKsheeT.Name = "StudentRepoertCard";
+
+
+                    for (int i = 1; i < dataGridView1.Columns.Count + 1; i++)
+                    {
+                        worKsheeT.Cells[1, i] = dataGridView1.Columns[i - 1].HeaderText;
+                    }
+
+                    for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
+                    {
+                        for (int j = 0; j < dataGridView1.Columns.Count; j++)
+                        {
+                            worKsheeT.Cells[i + 2, j + 1] = "teste";// dataGridView1.Rows[i].Cells[j].Value.ToString();
+                        }
+                    }
+
+                    excel.Columns.AutoFit();
+
+                    excel.Visible = true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Erro : " + ex.Message);
+                    XcelApp.Quit();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Sem dados a Exportar");
+            }
+        }
+
+
+
         private void gerarCSV() 
         {
             try 
@@ -283,7 +376,8 @@ namespace Interface.UI
 
         private void buttonExcel_Click(object sender, EventArgs e)
         {
-            ExportarExcel();
+            //ExportarExcel();
+            ExportarExcel3();
         }
     }
 }
