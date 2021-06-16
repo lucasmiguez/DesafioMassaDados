@@ -4,13 +4,9 @@ using CommonLibrary.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Interface.UI
@@ -26,7 +22,6 @@ namespace Interface.UI
         private DateTime DatatInicioRequest;
         private DateTime DatatFinalRequest;
         private double a_seconds;
-        Microsoft.Office.Interop.Excel.Application XcelApp = new Microsoft.Office.Interop.Excel.Application();
         public Form1()
         {
             InitializeComponent();
@@ -162,44 +157,9 @@ namespace Interface.UI
             }
         }
 
-        private void ExportarExcel() 
-        {
-            if (dataGridView1.Rows.Count > 0)
-            {
-                try
-                {
-                    XcelApp.Application.Workbooks.Add(Type.Missing);
-                    for (int i = 1; i < dataGridView1.Columns.Count + 1; i++)
-                    {
-                        XcelApp.Cells[1, i] = dataGridView1.Columns[i - 1].HeaderText;
-                    }
-                    
-                    for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
-                    {
-                        for (int j = 0; j < dataGridView1.Columns.Count; j++)
-                        {
-                            XcelApp.Cells[i + 2, j + 1] = dataGridView1.Rows[i].Cells[j].Value.ToString();
-                        }
-                    }
-                    
-                    XcelApp.Columns.AutoFit();
-                    
-                    XcelApp.Visible = true;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Erro : " + ex.Message);
-                    XcelApp.Quit();
-                }
-            }
-            else 
-            {
-                MessageBox.Show("Sem dados a Exportar");
-            }
-        }
 
 
-        private void ExportarExcel3()
+        private void ExportarExcel()
         {
             try 
             { 
@@ -238,56 +198,7 @@ namespace Interface.UI
         }
 
 
-        private void ExportarExcel2()
-        {
-            if (dataGridView1.Rows.Count > 0)
-            {
-                try
-                {
-                    Microsoft.Office.Interop.Excel.Application excel;
-                    Microsoft.Office.Interop.Excel.Workbook worKbooK;
-                    Microsoft.Office.Interop.Excel.Worksheet worKsheeT;
-                    Microsoft.Office.Interop.Excel.Range celLrangE;
-
-                    excel = new Microsoft.Office.Interop.Excel.Application();
-                    excel.Visible = false;
-                    excel.DisplayAlerts = false;
-                    worKbooK = excel.Workbooks.Add(Type.Missing);
-
-
-                    worKsheeT = (Microsoft.Office.Interop.Excel.Worksheet)worKbooK.ActiveSheet;
-                    worKsheeT.Name = "StudentRepoertCard";
-
-
-                    for (int i = 1; i < dataGridView1.Columns.Count + 1; i++)
-                    {
-                        worKsheeT.Cells[1, i] = dataGridView1.Columns[i - 1].HeaderText;
-                    }
-
-                    for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
-                    {
-                        for (int j = 0; j < dataGridView1.Columns.Count; j++)
-                        {
-                            worKsheeT.Cells[i + 2, j + 1] = "teste";// dataGridView1.Rows[i].Cells[j].Value.ToString();
-                        }
-                    }
-
-                    excel.Columns.AutoFit();
-
-                    excel.Visible = true;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Erro : " + ex.Message);
-                    XcelApp.Quit();
-                }
-            }
-            else
-            {
-                MessageBox.Show("Sem dados a Exportar");
-            }
-        }
-
+ 
 
 
         private void gerarCSV() 
@@ -376,8 +287,7 @@ namespace Interface.UI
 
         private void buttonExcel_Click(object sender, EventArgs e)
         {
-            //ExportarExcel();
-            ExportarExcel3();
+            ExportarExcel();
         }
     }
 }
